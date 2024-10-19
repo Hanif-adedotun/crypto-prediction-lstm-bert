@@ -23,18 +23,18 @@ def scrape_coindesk(start_date, end_date):
 
     while current_date <= end_date:
         curr_date_str = current_date.strftime('%Y-%m-%d')
-        start_date = start_date.strftime('%Y-%m-%d')
         date_unix = int(time.mktime(current_date.timetuple()) * 1000)
         url = f"{base_url}&sd={date_unix}&ed={date_unix}&df=Custom"
         driver.get(url)
     
-        # Wait for the search results to load
+        # Wait for the search results to load with a timeout
         try:
-            WebDriverWait(driver, 20).until(
+            WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "searchstyles__SearchCardWrapper-sc-ci5zlg-21"))
             )
-        except:
-            print(f"Timeout waiting for search results on {current_date}")
+        except Exception as e:
+            print(f"Timeout waiting for search results on {current_date}. Skipping to the next date.")
+            current_date += timedelta(days=1)
             continue
         
         html_content = driver.page_source
@@ -62,17 +62,17 @@ def scrape_coindesk(start_date, end_date):
             })
         
         current_date += timedelta(days=1)
-    
+        df = pd.DataFrame(results)
+        df.to_csv('./dataset/news-coindesk.csv', index=False, header=False) 
+        
     return results
 
 # Example usage
 start_date = datetime(2019, 1, 1)
-end_date = datetime(2024, 9, 30)
+end_date = datetime(2019, 7, 13)
 
 scraped_data = scrape_coindesk(start_date, end_date)
 
 # Print the results
 # print(json.dumps(scraped_data, indent=2))
 print(f"Seccessfully scraped {len(scraped_data)} data from {start_date} to {end_date}")
-df = pd.DataFrame(scraped_data)
-df.to_csv('./dataset/news-coindesk.csv')
