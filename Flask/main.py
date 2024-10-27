@@ -8,7 +8,7 @@ def home():
 
 @app.route('/hello')
 def hello():
-    return render_template('index.html', author="Hanif Test")
+    return render_template('index-new.html')
 
 @app.route('/api/data', methods=['GET'])
 def get_data():
