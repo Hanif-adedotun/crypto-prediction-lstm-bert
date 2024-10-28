@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template
-
+import io
+import base64
 app = Flask(__name__)
 
 @app.route('/')
@@ -9,6 +10,10 @@ def home():
 @app.route('/hello')
 def hello():
     return render_template('index-new.html')
+
+@app.route('/graph')
+def show_graph():
+     return render_template('index-new.html', plot_url = "https://github.com/user-attachments/assets/e03291f8-1252-4e92-9cb6-45abc1104b64") 
 
 @app.route('/api/data', methods=['GET'])
 def get_data():
@@ -21,6 +26,7 @@ def get_data():
 @app.route('/api/echo', methods=['POST'])
 def echo():
     data = request.json
+    # request.form['']
     return jsonify(data)
 
 if __name__ == '__main__':

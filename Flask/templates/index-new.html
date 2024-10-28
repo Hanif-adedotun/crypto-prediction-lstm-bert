@@ -109,16 +109,27 @@
         }
       }
 
-      .calendar-container {
+      .mid-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        gap: 20px;
+      }
+      .calendar-container, .chart-container {
         background: rgba(255, 255, 255, 0.9);
         padding: 1.5rem;
         border-radius: 16px;
         box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-        max-width: 500px; /* Reduced from 600px */
-        width: 90%; /* Added for better mobile scaling */
+        max-width: 700px; 
+        width: 90%; 
         margin: 0 auto;
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      
+      .chart-container img{
+           width: 100%;
       }
 
       .paper-link {
@@ -251,6 +262,16 @@
         text-align: center;
       }
 
+      footer{
+          width: 100%;
+          text-align: center;
+          margin-top: 50px;
+          font-size: 12px;
+      }
+
+      #predictionForm input{
+          visibility:hidden;
+      }
       /* Media queries for even smaller screens */
       @media (max-width: 400px) {
         .calendar-cell {
@@ -287,7 +308,7 @@
     <div class="container">
       <header>
         <div class="bitcoin-icon">₿</div>
-        <h1>BTC Price Prediction using FinBERT</h1>
+        <h1>BTC Price Prediction using FinBERT-LSTM</h1>
       </header>
 
       <div class="overview">
@@ -307,14 +328,25 @@
         </a>
       </div>
 
-      <div class="calendar-container">
-        <div id="calendar"></div>
-        <div class="date-range" id="dateRange">Select dates to begin</div>
-        <button class="predict-btn" id="predict" onclick="predict()">
-          Generate Prediction
-        </button>
-        <div id="prediction"></div>
+      <div class="mid-section">
+        <div class="calendar-container">
+          <form action="/submit" id="predictionForm">
+          <div id="calendar"></div>
+          <div class="date-range" id="dateRange">Select dates to begin</div>
+          <button class="predict-btn" id="predict" onclick="predict()">
+            Generate Prediction
+          </button>
+          <div id="prediction"></div>
+          <input type="text" name="startDate" id="startDateInput"/>
+          <input type="text" name="endDate" id="endDateInput"/>
+         </form>
+        </div>
+
+      {%if plot_url %}
+      <div class="chart-container">
+        <img src="{{plot_url}}" alt="Chart Cannot be displayed" />
       </div>
+      {%endif%}
     </div>
 
     <script>
@@ -433,6 +465,11 @@
           return;
         }
 
+       var form = document.getElementById("predictionForm");
+       document.getElementById("startDateInput").setAttribute('value',String(startDate));
+       document.getElementById("endDateInput").setAttribute('value', String(endDate));
+       form.submit();
+
         // Simulated prediction with random value and trend
         const days = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
         const basePrice = 35000;
@@ -457,4 +494,7 @@
       renderCalendar();
     </script>
   </body>
+  <footer>
+&copy; Built by <a href="https://hanif.one">Hanif</a> in 2024
+  </footer>
 </html>
