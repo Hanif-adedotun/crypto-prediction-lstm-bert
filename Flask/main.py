@@ -15,13 +15,11 @@ def hello():
 def show_graph():
      return render_template('index-new.html', plot_url = "https://github.com/user-attachments/assets/e03291f8-1252-4e92-9cb6-45abc1104b64") 
 
-@app.route('/api/data', methods=['GET'])
+@app.route('/submit', methods=['POST'])
 def get_data():
-    data = {
-        'message': 'This is some sample data',
-        'numbers': [1, 2, 3, 4, 5]
-    }
-    return jsonify(data)
+    startDate = request.form['startDate']
+    endDate = request.form['endDate']
+    return jsonify(startDate, endDate)
 
 @app.route('/api/echo', methods=['POST'])
 def echo():
