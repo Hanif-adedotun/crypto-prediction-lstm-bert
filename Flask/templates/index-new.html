@@ -225,14 +225,9 @@
         font-weight: 600;
         background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
         border-radius: 12px;
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.5s, transform 0.5s;
-      }
-
-      #prediction.show {
         opacity: 1;
         transform: translateY(0);
+        transition: opacity 0.5s, transform 0.5s;
       }
 
       .predict-btn {
@@ -332,7 +327,25 @@
           <button class="predict-btn" id="predict" onclick="predict()">
             Generate Prediction
           </button>
-          <div id="prediction"></div>
+           <div id="prediction">
+          
+          {%if result %}
+               <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">Price Prediction Analysis</div>
+               <div style="font-size: 1.5rem; color: #10b981">
+               {{result}}
+               </div>
+               <div style="font-size: 0.9rem; color: #64748b; margin-top: 0.5rem">
+               Based on {{days}} days of market data and news sentiment
+               </div>
+          {%endif%}
+
+          {%if error %}
+               <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">Price Prediction Analysis</div>
+               <div style="font-size: 1.5rem; color: #ef4444">
+               {{error}}
+               </div>
+          {%endif%}
+     </div>
       </div>
 
       {%if plot_url %}
@@ -440,9 +453,9 @@
       function updateDateRangeText() {
         const dateRangeElement = document.getElementById("dateRange");
         if (startDate && endDate) {
-          dateRangeElement.textContent = `Selected: ${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`;
+          dateRangeElement.textContent = `Selected: ${startDate.toLocaleDateString('en-GB')} - ${endDate.toLocaleDateString('en-GB')}`;
         } else if (startDate) {
-          dateRangeElement.textContent = `Start Date: ${startDate.toLocaleDateString()}`;
+          dateRangeElement.textContent = `Start Date: ${startDate.toLocaleDateString('en-GB')}`;
         } else {
           dateRangeElement.textContent = "Select dates to begin";
         }
@@ -454,6 +467,14 @@
         if (!startDate || !endDate) {
           predictionElement.textContent =
             "Please select both start and end dates";
+          predictionElement.className = "show";
+          return;
+        }
+        const startEdge = new Date('2019-01-01')
+        const endEdge = new Date('2024-09-30')
+        if((startDate < startEdge || startDate > endEdge ) || (endDate < startEdge || endDate > endEdge )){
+          predictionElement.textContent =
+            "Please enter a date between 1st January 2019 and 30th September, 2024";
           predictionElement.className = "show";
           return;
         }
@@ -489,28 +510,11 @@
                form.submit();
           }
 
-          post('/submit', {startDate: startDate.toLocaleDateString(), endDate:endDate.toLocaleDateString()})
-      
-
-        // Simulated prediction with random value and trend
+           // Simulated prediction with random value and trend
         const days = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
-        const basePrice = 35000;
-        const trend = Math.random() > 0.5 ? 1 : -1;
-        const variation = Math.random() * 500 * days;
-        const predictedPrice = Math.floor(basePrice + trend * variation);
-
-        predictionElement.innerHTML = `
-                <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">Price Prediction Analysis</div>
-                <div style="font-size: 1.5rem; color: ${
-                  trend > 0 ? "#10b981" : "#ef4444"
-                }">
-                    $${predictedPrice.toLocaleString()}
-                </div>
-                <div style="font-size: 0.9rem; color: #64748b; margin-top: 0.5rem">
-                    Based on ${days + 1} days of market data and news sentiment
-                </div>
-            `;
+        
         predictionElement.className = "show";
+        post('/submit', {startDate: startDate.toLocaleDateString('en-GB'), endDate:endDate.toLocaleDateString('en-GB'), days:days})
       }
 
       renderCalendar();
