@@ -1,7 +1,7 @@
 #### FinBERT-LSTM: Deep Learning based stock price prediction using News Sentiment Analysis
 ---
 
-This project is an imlementation based on this [paper](https://arxiv.org/pdf/2211.07392)
+This project is an implementation based on this [paper](https://arxiv.org/pdf/2211.07392)
 
 ---
 #### Methodology

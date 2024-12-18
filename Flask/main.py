@@ -6,6 +6,7 @@ import os
 import joblib
 import numpy as np
 import keras
+from sklearn.preprocessing import StandardScaler  # Add this import
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
