@@ -103,7 +103,7 @@ def get_data():
     predictions, x_bars = run_model(convert_date_format(startDate), convert_date_format(endDate))
     
     # "https://github.com/user-attachments/assets/e03291f8-1252-4e92-9cb6-45abc1104b64"
-    return render_template('result.html', 
+    return render_template('result-new.html', 
                            price = predictions,
                            len=len(predictions),
                            days = x_bars,

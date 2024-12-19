@@ -88,6 +88,28 @@
         -webkit-text-fill-color: transparent;
       }
 
+      .main-section{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        align-items: center;
+        width: 70vw;
+        margin: auto;
+        gap: 10px;
+      }
+
+       @media (max-width: 768px) {
+        .main-section{
+          grid-template-columns: 1fr;
+        }
+        .overview{
+          width: 50px;
+        border: 1px solid #ef4444;
+        }
+         .mid-section{
+        width: 50px;
+      }
+
+      }
       .overview {
         background: rgba(255, 255, 255, 0.9);
         padding: 2rem;
@@ -97,6 +119,7 @@
         animation: slideIn 1s ease-out;
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.2);
+        width: 500px;
       }
 
       @keyframes slideIn {
@@ -110,13 +133,11 @@
         }
       }
 
-      .mid-section {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        gap: 20px;
+      .mid-section{
+        width: 500px;
       }
+
+
       .calendar-container, .chart-container {
         background: rgba(255, 255, 255, 0.9);
         padding: 1.5rem;
@@ -307,6 +328,7 @@
         <h1>BTC Price Prediction using FinBERT-LSTM</h1>
       </header>
 
+  <section class="main-section">
     <div class="overview">
       <p>
         Stock market prediction is a complex challenge that significantly
@@ -347,6 +369,8 @@
           {%endif%}
      </div>
       </div>
+  </section>
+
 
       {%if plot_url %}
       <div class="chart-container">
@@ -354,6 +378,7 @@
       </div>
       {%endif%}
     </div>
+
 
     <script>
       let currentDate = new Date('2024-01-01');

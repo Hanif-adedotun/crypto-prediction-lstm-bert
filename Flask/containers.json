@@ -1,0 +1,8 @@
+{
+    "flask": {
+        "image": ":crypto-prediction-flask-service.flask-container.1",
+        "ports": {
+            "8080": "HTTP"
+        }
+    }
+}
