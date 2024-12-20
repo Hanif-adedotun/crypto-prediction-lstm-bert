@@ -12,7 +12,6 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 
-
 app = Flask(__name__)
 
 def convert_date_format(date_str):
