@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BTC Price Prediction Results</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #3b82f6;
+            --primary-dark: #1e293b;
+            --background-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--background-gradient);
+            color: var(--primary-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .page-wrapper {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header Section */
+        header {
+            text-align: center;
+            padding: 2rem 0;
+            position: relative;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .bitcoin-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--primary-dark), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Price Table Section */
+        .price-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeIn 1s ease-out;
+            overflow-x: auto;
+        }
+
+        .price-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .price-item {
+            padding: 0.75rem;
+            border-radius: 12px;
+            background: rgba(59, 130, 246, 0.05);
+            transition: all 0.2s ease;
+            animation: slideIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .price-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .price {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 0.25rem;
+        }
+
+        .date {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        /* Chart Section */
+        .chart-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        .chart-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .chart-container img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        /* Action Button */
+        .action-container {
+            text-align: center;
+            margin: 2rem 0;
+            animation: fadeIn 1s ease-out 0.6s both;
+        }
+
+        .predict-more-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #2563eb 100%);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);
+        }
+
+        .predict-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Summary Stats */
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .page-wrapper {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .price-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 0.75rem;
+            }
+
+            .price {
+                font-size: 1rem;
+            }
+
+            .date {
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .chart-section {
+                padding: 1rem;
+            }
+
+            .price-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <header>
+            <div class="bitcoin-icon">₿</div>
+            <h1>BTC Price Prediction Results</h1>
+        </header>
+
+        <div class="summary-stats">
+            <div class="stat-item">
+                <div class="stat-label">Average Predicted Price</div>
+                <div class="stat-value">${{ '%.2f'|format((price|sum) / len) }}</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Highest Prediction</div>
+                <div class="stat-value">${{ '%.2f'|format(price|max) }}</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Lowest Prediction</div>
+                <div class="stat-value">${{ '%.2f'|format(price|min) }}</div>
+            </div>
+        </div>
+
+        <section class="price-section">
+            <div class="price-grid">
+                {%for i in range(0, len)%}
+                <div class="price-item" style="animation-delay: {{ i * 0.05 }}s">
+                    <div class="price">${{ '%.2f'|format(price[i]) }}</div>
+                    <div class="date">{{ days[i] }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="chart-section">
+            <div class="chart-container">
+                <img src="{{ plot_url }}" alt="BTC Price Prediction Trend" />
+            </div>
+        </section>
+
+        <div class="action-container">
+            <a href="/" class="predict-more-btn">Make Another Prediction</a>
+        </div>
+    </div>
+</body>
+</html>
